@@ -1,5 +1,6 @@
 ﻿using E_commerce.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_commerce.Data
 {
@@ -147,6 +148,19 @@ namespace E_commerce.Data
             await context.SaveChangesAsync();
         }
 
-   
+        public static async Task SeedProducts(IServiceProvider serviceProvider)
+        {
+            var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
+            var danielsFarmfoods = await context.Producer.FirstOrDefaultAsync(p => p.ProducerName == "Daniel's Farmfoods");
+            var greenValleyGardens = await context.Producer.FirstOrDefaultAsync(p => p.ProducerName == "Green Valley Gardens");
+            var sunnyFieldsFarm = await context.Producer.FirstOrDefaultAsync(p => p.ProducerName == "Sunny Fields Farm");
+
+            if (danielsFarmfoods == null || greenValleyGardens == null || sunnyFieldsFarm == null)
+            {
+                throw new Exception("Producer not found.");
+            }
+        }
+
     }
 }
